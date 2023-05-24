@@ -12,6 +12,10 @@ add_library(
     pttui.h
     easy.h
     easy.c
+    init.h
+    init.c
+    exit.h
+    exit.c
     handle.h
     ncurses.h
     ncurses.c

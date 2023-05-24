@@ -3,6 +3,6 @@
 
 #include <libperiodic-c/periodic.h>
 
-#include "easy.h"
+typedef struct _pttui_handle pttui_handle_t;
 
 #endif

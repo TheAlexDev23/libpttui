@@ -4,11 +4,17 @@ project(pttui)
 
 add_subdirectory(lib/libperiodic-c)
 
+link_directories(lib/libperiodic-c/build)
+include_directories(lib)
+
 add_library(
-    ${project_name}
+    pttui
     pttui.h
     easy.h
     easy.c
+    handle.h
     ncurses.h
     ncurses.c
 )
+
+target_link_libraries(pttui periodic-c)

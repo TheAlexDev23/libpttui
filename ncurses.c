@@ -56,28 +56,37 @@ void _pttui_ncurses_refresh(pttui_handle_t* handle)
     {
         for (int y = 0; y < 7; y++)
         {
+            if (handle->elements[x][y].element == NULL)
+            {
+                continue;
+            }
+
             draw_box(handle->main_table, x, y);
-            mvwprintw(handle->main_table, y * 5 + 2, x * 5 + 1, handle->elements[x][y]->element->name);
-            handle->elements[x][y]->win = handle->main_table;
+            mvwprintw(handle->main_table, y * 5 + 2, x * 5 + 1, handle->elements[x][y].element->symbol);
+            handle->elements[x][y].win = handle->main_table;
 
-            handle->elements[x][y]->start.x = x * 5;
-            handle->elements[x][y]->start.y = y * 5;
+            handle->elements[x][y].start.x = x * 5;
+            handle->elements[x][y].start.y = y * 5;
 
-            handle->elements[x][y]->end.x = (x + 1) * 5;
-            handle->elements[x][y]->end.y = (y + 1) * 5;
+            handle->elements[x][y].end.x = (x + 1) * 5;
+            handle->elements[x][y].end.y = (y + 1) * 5;
         }
 
         for (int y = 8; y < 10; y++)
         {
+            if (handle->elements[x][y].element == NULL)
+            {
+                continue;
+            }
             draw_box(handle->bottom_table, x, y);
-            mvwprintw(handle->bottom_table, y * 5 + 2, x * 5 + 1, handle->elements[x][y]->element->name);
-            handle->elements[x][y]->win = handle->bottom_table;
+            mvwprintw(handle->bottom_table, y * 5 + 2, x * 5 + 1, handle->elements[x][y].element->symbol);
+            handle->elements[x][y].win = handle->bottom_table;
 
-            handle->elements[x][y]->start.x = x * 5;
-            handle->elements[x][y]->start.y = y * 5;
+            handle->elements[x][y].start.x = x * 5;
+            handle->elements[x][y].start.y = y * 5;
 
-            handle->elements[x][y]->end.x = (x + 1) * 5;
-            handle->elements[x][y]->end.y = (y + 1) * 5;
+            handle->elements[x][y].end.x = (x + 1) * 5;
+            handle->elements[x][y].end.y = (y + 1) * 5;
         }
     }
 }

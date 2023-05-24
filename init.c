@@ -12,12 +12,12 @@ int pttui_init(pttui_handle_t** handle)
 
     periodic_element_t** elements = periodic_get_all_elements();
 
-    for (int i = 0; i < 128; i++)
+    for (int i = 0; i < 118; i++)
     {
         periodic_element_t* element = elements[i];
         int x = element->pos.posX;
         int y = element->pos.posY;
-        (*handle)->elements[x][y]->element = element;
+        (*handle)->elements[x][y].element = element;
     }
 
     if (_pttui_ncurses_init(*handle))

@@ -1,6 +1,11 @@
 #ifndef _PTTUI_NCURSES_H_INCLUDED
 #define _PTTUI_NCURSES_H_INCLUDED
 
+#include <libperiodic-c/periodic.h>
+
+#include "pttui.h"
+#include "handle.h"
+
 typedef struct _pttui_screen_point
 {
     int x;

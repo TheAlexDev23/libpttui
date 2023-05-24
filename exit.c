@@ -9,8 +9,8 @@ void pttui_exit(pttui_handle_t* handle)
     {
         for (int y = 0; y < 10; y++)
         {
-            if (handle->elements[x][y]->element != NULL)
-                periodic_free_element(handle->elements[x][y]->element);
+            if (handle->elements[x][y].element != NULL)
+                periodic_free_element(handle->elements[x][y].element);
         }
     }
 

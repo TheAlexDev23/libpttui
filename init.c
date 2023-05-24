@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 #include <libperiodic-c/periodic.h>
 
 #include "init.h"

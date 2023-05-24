@@ -13,11 +13,13 @@ typedef struct _pttui_grid_element
     pttui_screen_point_t start;
     pttui_screen_point_t end;
 
-    /* Accepted to be NULL for grids that don't have elements */
+    /* Accepted to be NULL for elements of grids that shouldn't have elements */
     periodic_element_t* element;
 } pttui_grid_element_t ;
 
-int pttui_ncurses_init();
-int pttui_ncurses_exit();
+int _pttui_ncurses_init(pttui_handle_t* handle);
+void _pttui_ncurses_exit(pttui_handle_t* handle);
+
+void _pttui_ncurses_refresh(pttui_handle_t* handle);
 
 #endif

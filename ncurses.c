@@ -53,21 +53,21 @@ void draw_box(WINDOW* win, int x, int y)
 * Draws box and name of element in the needed grid element. 
 * Window of element needs to be set before calling 
 */
-void refresh_element(pttui_grid_element_t element, int x, int y)
+void refresh_element(pttui_grid_element_t* element, int x, int y)
 {
-    if (element.element == NULL)
+    if (element->element == NULL)
         return;
 
-    draw_box(element.win, x, y);
-    mvwprintw(element.win, y * 5 + 2, x * 5 + 1, element.element->symbol);
+    draw_box(element->win, x, y);
+    mvwprintw(element->win, y * 5 + 2, x * 5 + 1, element->element->symbol);
 
-    wrefresh(element.win);
+    wrefresh(element->win);
 
-    element.start.x = x * 5;
-    element.start.y = y * 5;
+    element->start.x = x * 5;
+    element->start.y = y * 5;
 
-    element.end.x = (x + 1) * 5;
-    element.end.y = (y + 1) * 5;
+    element->end.x = (x + 1) * 5;
+    element->end.y = (y + 1) * 5;
 }
 
 void _pttui_ncurses_refresh(pttui_handle_t* handle)
@@ -78,12 +78,12 @@ void _pttui_ncurses_refresh(pttui_handle_t* handle)
         for (int y = 0; y < 10; y++)
         {
             handle->elements[x][y].win = handle->main_table;
-            refresh_element(handle->elements[x][y], x, y);
+            refresh_element(&(handle->elements[x][y]), x, y);
         }
     }
 }
 
-pttui_grid_element_t _pttui_screen_point_to_grid_element(pttui_handle_t* handle)
+pttui_grid_element_t* _pttui_screen_point_to_grid_element(pttui_handle_t* handle)
 {
     int cury = getcury(handle->main_table);
     int curx = getcurx(handle->main_table);
@@ -92,15 +92,23 @@ pttui_grid_element_t _pttui_screen_point_to_grid_element(pttui_handle_t* handle)
     {
         for (int y = 0; y < 10; y++)
         {
+            /* Basically a way of checking if grid element isn't part of the peridic table */
+            if (handle->elements[x][y].element == NULL)
+                continue;
+            
             pttui_grid_element_t element = handle->elements[x][y];
+
+            fprintf(stderr, "%i %i %i %i\n", curx, cury, element.start.x, element.start.y);
 
             if (curx > element.start.x && curx < element.end.x &&
                 cury > element.start.y && cury < element.end.y)
             {
-                return element;
+                return &(handle->elements[x][y]);
             }
         }
     }
+
+    return NULL;
 }
 
 bool _pttui_handle_input(pttui_handle_t* handle)

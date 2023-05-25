@@ -18,9 +18,16 @@ periodic_element_t* pttui_easy_get_element(char* db_source)
 
     periodic_element_t* element = NULL;
 
-    while (!_pttui_handle_input(handle))
+    while (1)
     {
-        element = _pttui_screen_point_to_grid_element(handle).element;
+        if (_pttui_handle_input(handle))
+        {
+            pttui_grid_element_t* grid_element = _pttui_screen_point_to_grid_element(handle);
+            if (grid_element != NULL)
+                element = grid_element->element;
+            
+            break;
+        }
     }
 
     pttui_exit(handle, element);

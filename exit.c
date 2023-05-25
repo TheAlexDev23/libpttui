@@ -5,7 +5,7 @@
 
 #include "exit.h"
 
-void pttui_exit(pttui_handle_t *handle, periodic_element_t *selected_element)
+void pttui_exit(pttui_handle_t* handle, periodic_element_t* selected_element)
 {
     _pttui_ncurses_exit(handle);
     
@@ -14,12 +14,11 @@ void pttui_exit(pttui_handle_t *handle, periodic_element_t *selected_element)
     {
         for (int y = 0; y < 10; y++)
         {
-            periodic_element_t *element = handle->elements[x][y].element;
+            periodic_element_t* element = handle->elements[x][y].element;
             if (element != NULL)
             {
-                printf("%i %i\n", element->number, selected_element->number);
                 if (selected_element != NULL && selected_element->number == element->number)
-                    continue;
+                   continue;
 
                 periodic_free_element(element);
             }

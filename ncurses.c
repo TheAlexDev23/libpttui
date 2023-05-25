@@ -98,8 +98,6 @@ pttui_grid_element_t* _pttui_screen_point_to_grid_element(pttui_handle_t* handle
             
             pttui_grid_element_t element = handle->elements[x][y];
 
-            fprintf(stderr, "%i %i %i %i\n", curx, cury, element.start.x, element.start.y);
-
             if (curx > element.start.x && curx < element.end.x &&
                 cury > element.start.y && cury < element.end.y)
             {

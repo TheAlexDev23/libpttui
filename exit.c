@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <stdio.h> // REMOVE
 
 #include <libperiodic-c/periodic.h>
 

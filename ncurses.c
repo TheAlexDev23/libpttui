@@ -49,46 +49,98 @@ void draw_box(WINDOW* win, int x, int y)
     wrefresh(win);
 }
 
+/* 
+* Draws box and name of element in the needed grid element. 
+* Window of element needs to be set before calling 
+*/
+void refresh_element(pttui_grid_element_t element, int x, int y)
+{
+    if (element.element == NULL)
+        return;
+
+    draw_box(element.win, x, y);
+    mvwprintw(element.win, y * 5 + 2, x * 5 + 1, element.element->symbol);
+
+    wrefresh(element.win);
+
+    element.start.x = x * 5;
+    element.start.y = y * 5;
+
+    element.end.x = (x + 1) * 5;
+    element.end.y = (y + 1) * 5;
+}
+
 void _pttui_ncurses_refresh(pttui_handle_t* handle)
 {
     /* Draw grid */
     for (int x = 0; x < 18; x++)
     {
-        for (int y = 0; y < 7; y++)
+        for (int y = 0; y < 10; y++)
         {
-            if (handle->elements[x][y].element == NULL)
-            {
-                continue;
-            }
-
-            draw_box(handle->main_table, x, y);
-            mvwprintw(handle->main_table, y * 5 + 2, x * 5 + 1, handle->elements[x][y].element->symbol);
             handle->elements[x][y].win = handle->main_table;
-
-            handle->elements[x][y].start.x = x * 5;
-            handle->elements[x][y].start.y = y * 5;
-
-            handle->elements[x][y].end.x = (x + 1) * 5;
-            handle->elements[x][y].end.y = (y + 1) * 5;
-        }
-
-        for (int y = 8; y < 10; y++)
-        {
-            if (handle->elements[x][y].element == NULL)
-            {
-                continue;
-            }
-            draw_box(handle->bottom_table, x, y);
-            mvwprintw(handle->bottom_table, y * 5 + 2, x * 5 + 1, handle->elements[x][y].element->symbol);
-            handle->elements[x][y].win = handle->bottom_table;
-
-            handle->elements[x][y].start.x = x * 5;
-            handle->elements[x][y].start.y = y * 5;
-
-            handle->elements[x][y].end.x = (x + 1) * 5;
-            handle->elements[x][y].end.y = (y + 1) * 5;
+            refresh_element(handle->elements[x][y], x, y);
         }
     }
+}
+
+pttui_grid_element_t _pttui_screen_point_to_grid_element(pttui_handle_t* handle)
+{
+    int cury = getcury(handle->main_table);
+    int curx = getcurx(handle->main_table);
+
+    for (int x = 0; x < 18; x++)
+    {
+        for (int y = 0; y < 10; y++)
+        {
+            pttui_grid_element_t element = handle->elements[x][y];
+
+            if (curx > element.start.x && curx < element.end.x &&
+                cury > element.start.y && cury < element.end.y)
+            {
+                return element;
+            }
+        }
+    }
+}
+
+bool _pttui_handle_input(pttui_handle_t* handle)
+{
+    restart:;
+    int ch = wgetch(handle->main_table);
+
+    int x = getcurx(handle->main_table);
+    int y = getcury(handle->main_table);
+
+    switch (ch)
+    {
+        case KEY_UP:
+            if (y <= 0)
+                break;
+            wmove(handle->main_table, y - 1, x);
+            break;
+        case KEY_DOWN:
+            if (y >= getmaxy(handle->main_table))
+                break;
+            wmove(handle->main_table, y + 1, x);
+            break;
+        case KEY_LEFT:
+            if (x <= 0)
+                break;
+            wmove(handle->main_table, y, x - 1);
+            break;
+        case KEY_RIGHT:
+            if (x >= getmaxx(handle->main_table))
+                break;
+            wmove(handle->main_table, y, x + 1);
+            break;
+        case '\n':
+            return true;
+            break;
+        default:
+            goto restart;
+    }
+
+    return false;
 }
 
 int _pttui_ncurses_init(pttui_handle_t* handle)
@@ -97,15 +149,14 @@ int _pttui_ncurses_init(pttui_handle_t* handle)
 
     raw();
     noecho();
-
+    
     if (check_screen_size())
     {
         _pttui_ncurses_exit(handle);
         return -1;
     }
-
-    handle->main_table = newwin(5 * 7, 5 * 18, 0, 0);
-    handle->bottom_table = newwin(5 * 2, 5 * 18, 8 * 5, 0);
+    handle->main_table = newwin(5 * 10, 5 * 18, 0, 0);
+    keypad(handle->main_table, TRUE);
 
     _pttui_ncurses_refresh(handle);
 

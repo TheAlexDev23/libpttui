@@ -25,6 +25,9 @@ typedef struct _pttui_grid_element
 int _pttui_ncurses_init(pttui_handle_t* handle);
 void _pttui_ncurses_exit(pttui_handle_t* handle);
 
+pttui_grid_element_t _pttui_screen_point_to_grid_element(pttui_handle_t* handle);
+bool _pttui_handle_input(pttui_handle_t* handle);
+
 void _pttui_ncurses_refresh(pttui_handle_t* handle);
 
 #endif

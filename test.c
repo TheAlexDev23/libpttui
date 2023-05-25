@@ -1,23 +1,13 @@
-#include <unistd.h>
+#include <stdio.h>
 
 #include <libperiodic-c/periodic.h>
 
-#include "pttui.h"
-
-#include "handle.h"
-#include "init.h"
-#include "exit.h"
-
+#include "easy.h"
 
 int main()
 {
-    periodic_set_database("./lib/libperiodic-c/Periodic-Table-JSON/PeriodicTableJSON.json");
-    pttui_handle_t* handle = NULL;
-    pttui_init(&handle);
-
-    sleep(2);
-
-    //pttui_exit(handle);
+    periodic_element_t* element = pttui_easy_get_element("./lib/libperiodic-c/Periodic-Table-JSON/PeriodicTableJSON.json");
+    printf("%s", element->name);
 
     return 0;
 }

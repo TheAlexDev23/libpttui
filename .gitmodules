@@ -1,3 +1,4 @@
 [submodule "lib/libperiodic-c"]
 	path = lib/libperiodic-c
 	url = https://github.com/TheAlexDev23/libperiodic-c.git
+	branch = main

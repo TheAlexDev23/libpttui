@@ -7,7 +7,14 @@
 int main()
 {
     periodic_element_t* element = pttui_easy_get_element("./lib/libperiodic-c/Periodic-Table-JSON/PeriodicTableJSON.json");
-    printf("%s\n", element->name);
+    if (element != NULL)
+    {
+        printf("%s\n", element->name);
+    }
+    else 
+    {
+        printf("Not pointing at any element");
+    }
 
     return 0;
 }

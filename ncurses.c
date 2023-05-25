@@ -66,8 +66,8 @@ void refresh_element(pttui_grid_element_t* element, int x, int y)
     element->start.x = x * 5;
     element->start.y = y * 5;
 
-    element->end.x = (x + 1) * 5;
-    element->end.y = (y + 1) * 5;
+    element->end.x = (x + 1) * 5 - 1;
+    element->end.y = (y + 1) * 5 - 1;
 }
 
 void _pttui_ncurses_refresh(pttui_handle_t* handle)
@@ -98,8 +98,8 @@ pttui_grid_element_t* _pttui_screen_point_to_grid_element(pttui_handle_t* handle
             
             pttui_grid_element_t element = handle->elements[x][y];
 
-            if (curx > element.start.x && curx < element.end.x &&
-                cury > element.start.y && cury < element.end.y)
+            if (curx >= element.start.x && curx <= element.end.x &&
+                cury >= element.start.y && cury <= element.end.y)
             {
                 return &(handle->elements[x][y]);
             }

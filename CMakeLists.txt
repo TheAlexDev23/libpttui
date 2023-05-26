@@ -5,7 +5,6 @@ project(pttui)
 add_subdirectory(lib/libperiodic-c)
 
 link_directories(lib/libperiodic-c/build)
-include_directories(lib)
 
 add_library(
     pttui
@@ -21,4 +20,6 @@ add_library(
     ncurses.c
 )
 
-target_link_libraries(pttui periodic-c)
+target_include_directories(${PROJECT_NAME} PUBLIC lib)
+
+target_link_libraries(pttui periodic-c ncurses)
